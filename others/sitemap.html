@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitemap - UN SDG Website</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f6f3fc;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+        
+        /* --- Navbar Styling --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2c5530;
+            padding: 0.8rem 2rem;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            flex-wrap: wrap;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            background: #4CAF50;
+            border-radius: 50%;
+        }
+
+        .brand-name {
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-links li a:hover,
+        .nav-links li a.active {
+            background: #4CAF50;
+            color: #fff;
+        }
+
+        /* Sitemap Container */
+        .sitemap-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .sitemap-title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            font-weight: bold;
+            animation: fadeInDown 1s ease-out;
+        }
+        
+        /* Tree Structure */
+        .tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .tree-level {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .tree-node {
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .tree-node a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        /* Animation delays for staggered effect */
+        .tree-level:nth-child(1) .tree-node { animation-delay: 0.2s; }
+        .tree-level:nth-child(2) .tree-node:nth-child(1) { animation-delay: 0.4s; }
+        .tree-level:nth-child(2) .tree-node:nth-child(2) { animation-delay: 0.5s; }
+        .tree-level:nth-child(2) .tree-node:nth-child(3) { animation-delay: 0.6s; }
+        .tree-level:nth-child(2) .tree-node:nth-child(4) { animation-delay: 0.7s; }
+        .tree-level:nth-child(2) .tree-node:nth-child(5) { animation-delay: 0.8s; }
+        .tree-level:nth-child(3) .tree-node:nth-child(1) { animation-delay: 0.9s; }
+        .tree-level:nth-child(3) .tree-node:nth-child(2) { animation-delay: 1.0s; }
+        .tree-level:nth-child(3) .tree-node:nth-child(3) { animation-delay: 1.1s; }
+        .tree-level:nth-child(3) .tree-node:nth-child(4) { animation-delay: 1.2s; }
+        .tree-level:nth-child(4) .tree-node { animation-delay: 1.3s; }
+        .tree-level:nth-child(5) .tree-node { animation-delay: 1.5s; }
+        
+        /* Node Types */
+        .node-home {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .node-main {
+            background: linear-gradient(135deg, #007bff, #6610f2);
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        }
+        
+        .node-content {
+            background: linear-gradient(135deg, #17a2b8, #20c997);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            color: white;
+            box-shadow: 0 3px 12px rgba(23, 162, 184, 0.3);
+        }
+        
+        .node-utility {
+            background: linear-gradient(135deg, #6f42c1, #e83e8c);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            color: white;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 10px rgba(111, 66, 193, 0.3);
+        }
+        
+        /* FIXED CURRENT NODE STYLING */
+        .node-current {
+            background: linear-gradient(135deg, #FF6B35, #F7931E) !important;
+            padding: 0.8rem 1.5rem !important;
+            border-radius: 25px !important;
+            color: #ffffff !important;
+            font-weight: bold !important;
+            font-size: 1rem !important;
+            box-shadow: 
+                0 0 0 3px #FFD700,
+                0 6px 20px rgba(255, 107, 53, 0.5),
+                0 0 15px rgba(255, 215, 0, 0.6) !important;
+            animation: currentPagePulse 2s infinite !important;
+            border: 2px solid #FFD700 !important;
+            position: relative !important;
+            transform: scale(1.05) !important;
+            z-index: 100 !important;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        .node-current::before {
+            content: '🎯' !important;
+            position: absolute !important;
+            top: -10px !important;
+            right: -10px !important;
+            background: #FF0000 !important;
+            color: white !important;
+            width: 20px !important;
+            height: 20px !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 12px !important;
+            border: 2px solid white !important;
+            animation: bounceIndicator 1s ease-in-out infinite alternate !important;
+            z-index: 101 !important;
+        }
+        
+        .node-current::after {
+            content: '👆 YOU ARE HERE' !important;
+            position: absolute !important;
+            bottom: -40px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            background: linear-gradient(135deg, #333, #555) !important;
+            color: #FFD700 !important;
+            padding: 8px 16px !important;
+            border-radius: 20px !important;
+            font-size: 0.8rem !important;
+            font-weight: bold !important;
+            white-space: nowrap !important;
+            animation: glowText 2s ease-in-out infinite alternate !important;
+            border: 2px solid #FFD700 !important;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5) !important;
+        }
+        
+        /* Hover Effects */
+        .tree-node:hover {
+            transform: translateY(-8px) scale(1.05);
+            z-index: 10;
+        }
+        
+        .node-home:hover {
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.5);
+            transform: translateY(-8px) scale(1.15);
+        }
+        
+        .node-main:hover {
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.5);
+        }
+        
+        .node-content:hover {
+            box-shadow: 0 5px 18px rgba(23, 162, 184, 0.5);
+        }
+        
+        .node-utility:hover {
+            box-shadow: 0 4px 15px rgba(111, 66, 193, 0.5);
+        }
+        
+        .node-current:hover {
+            box-shadow: 
+                0 0 0 6px #FFD700,
+                0 12px 35px rgba(255, 107, 53, 0.8),
+                0 0 30px rgba(255, 215, 0, 1) !important;
+            transform: translateY(-5px) scale(1.25) !important;
+        }
+        
+        /* SVG Lines */
+        .connection-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .connection-line {
+            stroke: #6c757d;
+            stroke-width: 2;
+            opacity: 0.6;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawLine 1s ease-out forwards;
+        }
+        
+        /* Legend */
+        .legend {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .legend h3 {
+            width: 100%;
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 1rem;
+            padding: 0.8rem 1.2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .legend-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .legend-color {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            margin-right: 0.8rem;
+        }
+
+        /* Footer */
+        .footer-content {
+            text-align: center;
+            padding: 2rem;
+            background: #2c3e50;
+            color: white;
+            margin-top: 2rem;
+        }
+        
+        .footer-links a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* FIXED KEYFRAME ANIMATIONS */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes drawLine {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+        
+        @keyframes currentPagePulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 0 4px #FFD700,
+                    0 8px 25px rgba(255, 107, 53, 0.6),
+                    0 0 20px rgba(255, 215, 0, 0.8);
+                transform: scale(1.2);
+            }
+            50% {
+                box-shadow: 
+                    0 0 0 6px #FFD700,
+                    0 12px 35px rgba(255, 107, 53, 0.8),
+                    0 0 30px rgba(255, 215, 0, 1);
+                transform: scale(1.25);
+            }
+        }
+        
+        @keyframes glowText {
+            0% {
+                background: linear-gradient(135deg, #333, #555);
+                color: #FFD700;
+                box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+            }
+            100% {
+                background: linear-gradient(135deg, #FFD700, #FFA500);
+                color: #333;
+                box-shadow: 0 6px 20px rgba(255, 215, 0, 0.8);
+            }
+        }
+        
+        @keyframes bounceIndicator {
+            0% {
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                transform: translateY(-8px) scale(1.1);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .sitemap-container {
+                padding: 1rem;
+                margin: 1rem;
+            }
+            
+            .sitemap-title {
+                font-size: 2rem;
+            }
+            
+            .tree-level {
+                gap: 0.5rem;
+                margin: 1.5rem 0;
+            }
+            
+            .tree-node {
+                font-size: 0.9rem;
+            }
+            
+            .node-home {
+                padding: 0.8rem 1.5rem;
+                transform: scale(1.05);
+            }
+            
+            .node-main {
+                padding: 0.7rem 1.2rem;
+            }
+            
+            .node-content {
+                padding: 0.5rem 1rem;
+            }
+            
+            .node-utility {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            
+            .node-current {
+                transform: scale(1.1) !important;
+                padding: 0.8rem 1.5rem !important;
+            }
+            
+            .legend-item {
+                margin: 0.3rem;
+                padding: 0.6rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <div class="logo"></div>
+                <span class="brand-name">UN SDG Initiative</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="volunteer.html">Volunteer</a></li>
+                <li><a href="table.html">Data</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="feedback.html">Feedback</a></li>
+                <li><a href="sitemap.html" class="active">Sitemap</a></li>
+                <li><a href="team.html">Team</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="sitemap-container">
+            <h1 class="sitemap-title">Website Structure Map</h1>
+            
+            <div class="tree" id="tree-container">
+                <svg class="connection-svg" id="connection-svg"></svg>
+                
+                <!-- Level 1 - Home -->
+                <div class="tree-level">
+                    <div class="tree-node node-home" data-level="0" data-index="0">
+                        <a href="home.html">Home</a>
+                    </div>
+                </div>
+                
+                <!-- Level 2 - Main Pages -->
+                <div class="tree-level">
+                    <div class="tree-node node-main" data-level="1" data-index="0">
+                        <a href="volunteer.html">Volunteer</a>
+                    </div>
+                    
+                    <div class="tree-node node-main" data-level="1" data-index="1">
+                        <a href="table.html">Data Table</a>
+                    </div>
+                    
+                    <div class="tree-node node-main" data-level="1" data-index="2">
+                        <a href="profile.html">Profile</a>
+                    </div>
+                    
+                    <div class="tree-node node-main" data-level="1" data-index="3">
+                        <a href="feedback.html">Feedback</a>
+                    </div>
+                    
+                    <div class="tree-node node-main" data-level="1" data-index="4">
+                        <a href="team.html">Team</a>
+                    </div>
+                </div>
+                
+                <!-- Level 3 - Content Pages -->
+                <div class="tree-level">
+                    <div class="tree-node node-content" data-level="2" data-index="0">
+                        <a href="content_ST1.html">Student 1 Content</a>
+                    </div>
+                    
+                    <div class="tree-node node-content" data-level="2" data-index="1">
+                        <a href="content_ST2.html">Student 2 Content</a>
+                    </div>
+                    
+                    <div class="tree-node node-content" data-level="2" data-index="2">
+                        <a href="content_ST3.html">Student 3 Content</a>
+                    </div>
+                    
+                    <div class="tree-node node-content" data-level="2" data-index="3">
+                        <a href="content_ST4.html">Student 4 Content</a>
+                    </div>
+                </div>
+                
+                <!-- Level 4 - Utility Pages -->
+                <div class="tree-level">
+                    <div class="tree-node node-utility" data-level="3" data-index="0">
+                        <a href="pageEditor_ST1.html">Editor 1</a>
+                    </div>
+                    
+                    <div class="tree-node node-utility" data-level="3" data-index="1">
+                        <a href="pageEditor_ST2.html">Editor 2</a>
+                    </div>
+                    
+                    <div class="tree-node node-utility" data-level="3" data-index="2">
+                        <a href="pageEditor_ST3.html">Editor 3</a>
+                    </div>
+                    
+                    <div class="tree-node node-utility" data-level="3" data-index="3">
+                        <a href="pageEditor_ST4.html">Editor 4</a>
+                    </div>
+                    
+                    <div class="tree-node node-utility" data-level="3" data-index="4">
+                        <a href="validation_ST1.html">Validation 1</a>
+                    </div>
+                    
+                    <div class="tree-node node-utility" data-level="3" data-index="5">
+                        <a href="validation_ST2.html">Validation 2</a>
+                    </div>
+                    
+                    <div class="tree-node node-utility" data-level="3" data-index="6">
+                        <a href="validation_ST3.html">Validation 3</a>
+                    </div>
+                    
+                    <div class="tree-node node-utility" data-level="3" data-index="7">
+                        <a href="validation_ST4.html">Validation 4</a>
+                    </div>
+                </div>
+                
+                <!-- Special Pages -->
+                <div class="tree-level">
+                    <div class="tree-node node-current" data-level="4" data-index="0">
+                        <a href="sitemap.html">Sitemap (Current)</a>
+                    </div>
+                    
+                    <div class="tree-node node-utility" data-level="4" data-index="1">
+                        <a href="splash.html">Splash Screen</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Legend -->
+            <div class="legend">
+                <h3>Page Type Legend</h3>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #28a745, #20c997);"></div>
+                    <span>Home Page</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #007bff, #6610f2);"></div>
+                    <span>Main Pages</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #17a2b8, #20c997);"></div>
+                    <span>Content Pages</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #6f42c1, #e83e8c);"></div>
+                    <span>Utility Pages</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #FF6B35, #F7931E);"></div>
+                    <span>Current Page</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 UN SDG Website. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="pageEditor_ST4.html">Page Editor ST4</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function createConnections() {
+            const svg = document.getElementById('connection-svg');
+            const treeContainer = document.getElementById('tree-container');
+            const levels = treeContainer.querySelectorAll('.tree-level');
+            
+            // Clear existing lines
+            svg.innerHTML = '';
+            
+            // Get the tree container's bounding rectangle
+            const treeRect = treeContainer.getBoundingClientRect();
+            const containerRect = treeContainer.parentElement.getBoundingClientRect();
+            
+            // Connection mapping: which nodes connect to which
+            const connections = [
+                // Home to all main pages
+                { from: [0, 0], to: [1, 0] },
+                { from: [0, 0], to: [1, 1] },
+                { from: [0, 0], to: [1, 2] },
+                { from: [0, 0], to: [1, 3] },
+                { from: [0, 0], to: [1, 4] },
+                
+                // Main pages to content pages
+                { from: [1, 0], to: [2, 0] }, // Volunteer to Student 1
+                { from: [1, 1], to: [2, 1] }, // Data to Student 2
+                { from: [1, 2], to: [2, 2] }, // Profile to Student 3
+                { from: [1, 3], to: [2, 3] }, // Feedback to Student 4
+                
+                // Content pages to utility pages
+                { from: [2, 0], to: [3, 0] }, // Student 1 to Editor 1
+                { from: [2, 0], to: [3, 4] }, // Student 1 to Validation 1
+                { from: [2, 1], to: [3, 1] }, // Student 2 to Editor 2
+                { from: [2, 1], to: [3, 5] }, // Student 2 to Validation 2
+                { from: [2, 2], to: [3, 2] }, // Student 3 to Editor 3
+                { from: [2, 2], to: [3, 6] }, // Student 3 to Validation 3
+                { from: [2, 3], to: [3, 3] }, // Student 4 to Editor 4
+                { from: [2, 3], to: [3, 7] }, // Student 4 to Validation 4
+                
+                // Special connections
+                { from: [0, 0], to: [4, 0] }, // Home to Sitemap
+                { from: [0, 0], to: [4, 1] }, // Home to Splash
+            ];
+            
+            connections.forEach((conn, index) => {
+                const fromLevel = conn.from[0];
+                const fromIndex = conn.from[1];
+                const toLevel = conn.to[0];
+                const toIndex = conn.to[1];
+                
+                const fromNode = levels[fromLevel]?.children[fromIndex];
+                const toNode = levels[toLevel]?.children[toIndex];
+                
+                if (fromNode && toNode) {
+                    const fromRect = fromNode.getBoundingClientRect();
+                    const toRect = toNode.getBoundingClientRect();
+                    
+                    // Calculate positions relative to the tree container
+                    const fromX = fromRect.left + fromRect.width / 2 - treeRect.left;
+                    const fromY = fromRect.bottom - treeRect.top;
+                    const toX = toRect.left + toRect.width / 2 - treeRect.left;
+                    const toY = toRect.top - treeRect.top;
+                    
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    line.setAttribute('x1', fromX);
+                    line.setAttribute('y1', fromY);
+                    line.setAttribute('x2', toX);
+                    line.setAttribute('y2', toY);
+                    line.classList.add('connection-line');
+                    line.style.animationDelay = `${1.8 + index * 0.1}s`;
+                    
+                    svg.appendChild(line);
+                }
+            });
+        }
+        
+        // Initialize connections after page loads and animations start
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                createConnections();
+            }, 500);
+        });
+        
+        // Redraw on resize
+        window.addEventListener('resize', () => {
+            setTimeout(createConnections, 100);
+        });
+        
+        // Add hover effects for interactive connections
+        document.querySelectorAll('.tree-node').forEach(node => {
+            node.addEventListener('mouseenter', () => {
+                node.style.zIndex = '10';
+            });
+            
+            node.addEventListener('mouseleave', () => {
+                node.style.zIndex = '1';
+            });
+        });
+        
+        // Ensure current page node is always visible
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentNode = document.querySelector('.node-current');
+            if (currentNode) {
+                // Force visibility
+                currentNode.style.display = 'block';
+                currentNode.style.visibility = 'visible';
+                currentNode.style.opacity = '1';
+                
+                // Add extra visual emphasis
+                setTimeout(() => {
+                    currentNode.style.background = 'linear-gradient(135deg, #FF6B35, #F7931E)';
+                    currentNode.style.color = '#ffffff';
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>
